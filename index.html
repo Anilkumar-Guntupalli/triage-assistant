@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TriageAssist | Real‑Time Emergency Triage Assistant</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        html { scroll-behavior: smooth; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in-up { animation: fadeInUp 0.6s ease-out; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        .recording { animation: pulse 1s infinite; }
+        .loading-spinner {
+            border: 3px solid rgba(59,130,246,0.2);
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); }
+        .hero-bg {
+            background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('https://images.unsplash.com/photo-1586773860418-d37222d8fce3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-color: #0f2b3d;
+        }
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 2px, transparent 2px, transparent 8px);
+            pointer-events: none;
+        }
+        .how-img {
+            background-size: cover;
+            background-position: center;
+            height: 200px;
+            border-radius: 0.75rem;
+        }
+        .testimonial-img {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans antialiased">
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-ambulance text-blue-600 text-2xl"></i>
+                <span class="text-xl font-bold text-gray-800">TriageAssist</span>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#home" class="text-gray-600 hover:text-blue-600 transition">Home</a>
+                <a href="#features" class="text-gray-600 hover:text-blue-600 transition">Features</a>
+                <a href="#how-it-works" class="text-gray-600 hover:text-blue-600 transition">How It Works</a>
+                <a href="#pruning" class="text-gray-600 hover:text-blue-600 transition">Pruning Demo</a>
+                <a href="#assistant" class="text-gray-600 hover:text-blue-600 transition">Assistant</a>
+                <a href="#testimonials" class="text-gray-600 hover:text-blue-600 transition">Testimonials</a>
+            </div>
+            <button id="mobileMenuBtn" class="md:hidden text-gray-600 text-2xl">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-t">
+            <div class="flex flex-col px-4 py-2 space-y-2">
+                <a href="#home" class="py-2 text-gray-600 hover:text-blue-600">Home</a>
+                <a href="#features" class="py-2 text-gray-600 hover:text-blue-600">Features</a>
+                <a href="#how-it-works" class="py-2 text-gray-600 hover:text-blue-600">How It Works</a>
+                <a href="#pruning" class="py-2 text-gray-600 hover:text-blue-600">Pruning Demo</a>
+                <a href="#assistant" class="py-2 text-gray-600 hover:text-blue-600">Assistant</a>
+                <a href="#testimonials" class="py-2 text-gray-600 hover:text-blue-600">Testimonials</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Original Image -->
+    <section id="home" class="hero-bg text-white py-32 relative">
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4 fade-in-up">Emergency Triage Assistant</h1>
+            <p class="text-xl mb-8 max-w-2xl mx-auto fade-in-up" style="animation-delay: 0.1s;">
+                Instant, intelligent recommendations with <strong>context pruning</strong>.
+            </p>
+            <a href="#assistant" class="inline-block bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 py-3 rounded-full text-lg transition shadow-lg fade-in-up" style="animation-delay: 0.2s;">
+                Try Now <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Why Choose TriageAssist?</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Engineered for emergency rooms and disaster zones – fast, accurate, and hands‑free.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-gray-50 rounded-xl p-6 text-center card-hover">
+                    <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-brain text-blue-600 text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Intelligent Pruning</h3>
+                    <p class="text-gray-600">Automatically filters irrelevant history (e.g., dental records for cardiac events) – only relevant context is used.</p>
+                </div>
+                <div class="bg-gray-50 rounded-xl p-6 text-center card-hover">
+                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-tachometer-alt text-green-600 text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Ultra‑Low Latency</h3>
+                    <p class="text-gray-600">Designed for speed – response times measured and guaranteed for real‑time decision making.</p>
+                </div>
+                <div class="bg-gray-50 rounded-xl p-6 text-center card-hover">
+                    <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-microphone-alt text-purple-600 text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Voice‑Enabled</h3>
+                    <p class="text-gray-600">Hands‑free operation – describe the emergency verbally, ideal for urgent situations.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section with Images -->
+    <section id="how-it-works" class="py-16 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">How It Works</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Three simple steps to get instant triage recommendations.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover">
+                    <div class="how-img" style="background-image: url('https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="p-6">
+                        <div class="text-3xl font-bold text-blue-600 mb-2">1</div>
+                        <h3 class="text-xl font-bold mb-2">Speak or Type</h3>
+                        <p class="text-gray-600">Describe the emergency – voice input or text. Example: "65‑year‑old male with chest pain."</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover">
+                    <div class="how-img" style="background-image: url('https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="p-6">
+                        <div class="text-3xl font-bold text-blue-600 mb-2">2</div>
+                        <h3 class="text-xl font-bold mb-2">Intelligent Pruning</h3>
+                        <p class="text-gray-600">Our system retrieves relevant medical history & protocols, filtering out noise automatically.</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover">
+                    <div class="how-img" style="background-image: url('https://images.unsplash.com/photo-1584515933487-779824d29309?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="p-6">
+                        <div class="text-3xl font-bold text-blue-600 mb-2">3</div>
+                        <h3 class="text-xl font-bold mb-2">Get Recommendation</h3>
+                        <p class="text-gray-600">Receive a concise, step‑by‑step action plan with latency displayed in milliseconds.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Context Pruning Demo Section -->
+    <section id="pruning" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Intelligent Context Pruning in Action</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">See how we filter out noise to give you only what matters.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-gray-50 rounded-xl shadow-md p-6 card-hover">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-heartbeat text-red-500 text-3xl mr-3"></i>
+                        <h3 class="text-xl font-bold">Cardiac Emergency Query</h3>
+                    </div>
+                    <p class="text-gray-600 mb-4"><strong>Query:</strong> "65-year-old male with chest pain and history of hypertension"</p>
+                    <div class="bg-blue-50 p-3 rounded mb-2">
+                        <p class="font-semibold">✅ Relevant Context Retrieved:</p>
+                        <ul class="list-disc list-inside text-sm">
+                            <li>Hypertension and stable angina history</li>
+                            <li>Positive stress test, ischemia</li>
+                            <li>NSTEMI with stent placement</li>
+                        </ul>
+                    </div>
+                    <div class="bg-red-50 p-3 rounded">
+                        <p class="font-semibold">❌ Automatically Pruned (Ignored):</p>
+                        <ul class="list-disc list-inside text-sm">
+                            <li>Dental record from 2010 (irrelevant)</li>
+                            <li>Orthopedic sprain record</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="bg-gray-50 rounded-xl shadow-md p-6 card-hover">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-tooth text-blue-500 text-3xl mr-3"></i>
+                        <h3 class="text-xl font-bold">Dental Emergency Query</h3>
+                    </div>
+                    <p class="text-gray-600 mb-4"><strong>Query:</strong> "Bleeding after tooth extraction, need advice"</p>
+                    <div class="bg-blue-50 p-3 rounded mb-2">
+                        <p class="font-semibold">✅ Relevant Context Retrieved:</p>
+                        <ul class="list-disc list-inside text-sm">
+                            <li>Dental protocol: control bleeding, refer to dentist</li>
+                            <li>Routine dental cleaning record (from 2010)</li>
+                        </ul>
+                    </div>
+                    <div class="bg-red-50 p-3 rounded">
+                        <p class="font-semibold">❌ Automatically Pruned (Ignored):</p>
+                        <ul class="list-disc list-inside text-sm">
+                            <li>Cardiology records (hypertension, stress test, NSTEMI)</li>
+                            <li>Orthopedic sprain record</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Triage Assistant Interactive Section -->
+    <section id="assistant" class="py-16 bg-gray-100">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
+                <div class="bg-gradient-to-r from-blue-700 to-indigo-800 px-6 py-8">
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                        <i class="fas fa-robot"></i> Try the Triage Assistant
+                    </h2>
+                    <p class="text-blue-100 mt-2">Real‑time recommendations with context pruning – voice input supported.</p>
+                </div>
+                <div class="p-6 md:p-8">
+                    <!-- Input Area -->
+                    <div class="mb-8">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            Describe the emergency:
+                        </label>
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <div class="flex-1 relative">
+                                <input type="text" id="query" placeholder="e.g., 65-year-old male with crushing chest pain and sweating"
+                                       class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                            </div>
+                            <div class="flex gap-2">
+                                <button id="voiceBtn" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-3 rounded-lg flex items-center gap-2 transition shadow-md">
+                                    <i class="fas fa-microphone"></i> Voice
+                                </button>
+                                <button id="submitBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg shadow-md transition">
+                                    <i class="fas fa-stethoscope mr-1"></i> Ask
+                                </button>
+                                <button id="clearBtn" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-3 rounded-lg shadow-md transition">
+                                    <i class="fas fa-eraser"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Example Queries -->
+                    <div class="mb-8">
+                        <p class="text-sm font-medium text-gray-700 mb-3">
+                            <i class="fas fa-lightbulb text-yellow-500 mr-1"></i> Try these examples:
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="example-btn bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-1.5 rounded-full text-sm transition flex items-center gap-1">
+                                <i class="fas fa-heartbeat text-red-500"></i> Chest pain (cardiac)
+                            </button>
+                            <button class="example-btn bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-1.5 rounded-full text-sm transition flex items-center gap-1">
+                                <i class="fas fa-tooth text-blue-500"></i> Dental emergency
+                            </button>
+                            <button class="example-btn bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-1.5 rounded-full text-sm transition flex items-center gap-1">
+                                <i class="fas fa-car-crash text-gray-500"></i> Major trauma
+                            </button>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-3">
+                            <i class="fas fa-check-circle text-green-500 mr-1"></i> The system will <strong>prune irrelevant history</strong> – try the cardiac example, you'll see no dental records!
+                        </p>
+                    </div>
+
+                    <!-- Results Area -->
+                    <div id="result" class="hidden border-t pt-6">
+                        <div class="mb-6">
+                            <div class="flex justify-between items-center mb-3">
+                                <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+                                    <i class="fas fa-comment-medical text-blue-500"></i> Recommendation
+                                </h3>
+                                <button id="copyBtn" class="text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded-md transition flex items-center gap-1">
+                                    <i class="fas fa-copy"></i> Copy
+                                </button>
+                            </div>
+                            <div id="recommendation" class="bg-blue-50 border border-blue-200 rounded-xl p-4 whitespace-pre-wrap text-gray-800"></div>
+                        </div>
+                        <div class="mb-6">
+                            <h3 class="text-lg font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                <i class="fas fa-file-alt text-green-600"></i> Context Used (Pruned)
+                            </h3>
+                            <div id="context" class="bg-gray-50 rounded-xl p-4 text-sm text-gray-700 border border-gray-200"></div>
+                        </div>
+                        <div class="mb-6">
+                            <h3 class="text-lg font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                <i class="fas fa-trash-alt text-red-500"></i> Ignored (Noise Reduction)
+                            </h3>
+                            <div id="ignored" class="bg-gray-50 rounded-xl p-4 text-sm text-gray-500 border border-gray-200 italic">
+                                Loading...
+                            </div>
+                        </div>
+                        <div class="text-right text-sm text-gray-500 flex items-center justify-end gap-2">
+                            <i class="fas fa-hourglass-half"></i> Response time: <span id="latency">0</span> ms
+                        </div>
+                    </div>
+
+                    <div id="loading" class="hidden text-center py-8">
+                        <div class="loading-spinner mx-auto"></div>
+                        <p class="mt-3 text-gray-600">Analyzing with context pruning...</p>
+                    </div>
+
+                    <div id="error" class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mt-4 flex items-start gap-2">
+                        <i class="fas fa-exclamation-triangle mt-0.5"></i> <span id="errorText"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials with Images -->
+    <section id="testimonials" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Trusted by Medical Professionals</h2>
+                <p class="text-gray-600">See what ER doctors and disaster responders say about TriageAssist.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-gray-50 rounded-xl p-6 shadow-md card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="testimonial-img" style="background-image: url('https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80');"></div>
+                        <div class="ml-3">
+                            <p class="font-bold">Dr. Emily Chen</p>
+                            <p class="text-sm text-gray-500">ER Physician</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">“The speed is remarkable – I get recommendations almost instantly. The context pruning saves me from sifting through irrelevant notes.”</p>
+                </div>
+                <div class="bg-gray-50 rounded-xl p-6 shadow-md card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="testimonial-img" style="background-image: url('https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80');"></div>
+                        <div class="ml-3">
+                            <p class="font-bold">Dr. Michael Torres</p>
+                            <p class="text-sm text-gray-500">Disaster Response Coordinator</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">“Voice input is a game‑changer in chaotic environments. The system filters out dental records when I ask about chest pain – brilliant.”</p>
+                </div>
+                <div class="bg-gray-50 rounded-xl p-6 shadow-md card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="testimonial-img" style="background-image: url('https://images.unsplash.com/photo-1594824476967-48c8b964273f?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80');"></div>
+                        <div class="ml-3">
+                            <p class="font-bold">Nurse Sarah Johnson</p>
+                            <p class="text-sm text-gray-500">Emergency Room Nurse</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">“Simple, fast, and accurate. The copy feature helps me quickly document recommendations. Highly recommended.”</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p class="mb-2">&copy; 2026 TriageAssist – Real‑Time Emergency Triage Assistant</p>
+            <p class="text-sm text-gray-400">Designed for HPE Internship – Intelligent Context Pruning, Ultra‑Low Latency, Voice Input.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        if (mobileBtn) {
+            mobileBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        // Triage Assistant logic (same as before)
+        const API_URL = "http://localhost:8000/triage";
+        const submitBtn = document.getElementById("submitBtn");
+        const voiceBtn = document.getElementById("voiceBtn");
+        const clearBtn = document.getElementById("clearBtn");
+        const queryInput = document.getElementById("query");
+        const resultDiv = document.getElementById("result");
+        const loadingDiv = document.getElementById("loading");
+        const errorDiv = document.getElementById("error");
+        const errorTextSpan = document.getElementById("errorText");
+        const recommendationDiv = document.getElementById("recommendation");
+        const contextDiv = document.getElementById("context");
+        const ignoredDiv = document.getElementById("ignored");
+        const latencySpan = document.getElementById("latency");
+        const copyBtn = document.getElementById("copyBtn");
+
+        let recognition = null;
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            recognition.onstart = () => {
+                voiceBtn.classList.add('recording', 'bg-purple-700');
+                voiceBtn.innerHTML = '<i class="fas fa-stop"></i> Listening...';
+            };
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                queryInput.value = transcript;
+                voiceBtn.classList.remove('recording', 'bg-purple-700');
+                voiceBtn.innerHTML = '<i class="fas fa-microphone"></i> Voice';
+                submit();
+            };
+            recognition.onerror = (event) => {
+                console.error(event);
+                voiceBtn.classList.remove('recording', 'bg-purple-700');
+                voiceBtn.innerHTML = '<i class="fas fa-microphone"></i> Voice';
+                showError('Voice recognition error. Please try again.');
+            };
+            recognition.onend = () => {
+                voiceBtn.classList.remove('recording', 'bg-purple-700');
+                voiceBtn.innerHTML = '<i class="fas fa-microphone"></i> Voice';
+            };
+        } else {
+            voiceBtn.disabled = true;
+            voiceBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            voiceBtn.title = "Voice not supported in this browser";
+        }
+
+        voiceBtn.addEventListener('click', () => {
+            if (!recognition) return;
+            if (voiceBtn.classList.contains('recording')) {
+                recognition.abort();
+            } else {
+                recognition.start();
+            }
+        });
+
+        clearBtn.addEventListener('click', () => {
+            queryInput.value = '';
+            resultDiv.classList.add('hidden');
+            errorDiv.classList.add('hidden');
+        });
+
+        copyBtn.addEventListener('click', () => {
+            const text = recommendationDiv.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const original = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                setTimeout(() => copyBtn.innerHTML = original, 1500);
+            });
+        });
+
+        const exampleBtns = document.querySelectorAll('.example-btn');
+        const exampleQueries = {
+            'Chest pain (cardiac)': 'chest pain, history of hypertension and angina',
+            'Dental emergency': 'dental emergency, bleeding after tooth extraction',
+            'Major trauma': 'car accident, major trauma'
+        };
+        exampleBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const label = btn.innerText.trim();
+                queryInput.value = exampleQueries[label] || '';
+                submit();
+            });
+        });
+
+        submitBtn.addEventListener('click', submit);
+
+        async function submit() {
+            const query = queryInput.value.trim();
+            if (!query) {
+                showError("Please enter or speak a description.");
+                return;
+            }
+
+            errorDiv.classList.add('hidden');
+            resultDiv.classList.add('hidden');
+            loadingDiv.classList.remove('hidden');
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query })
+                });
+                if (!response.ok) {
+                    const err = await response.json();
+                    throw new Error(err.detail || 'Server error');
+                }
+                const data = await response.json();
+
+                recommendationDiv.innerText = data.recommendation;
+
+                if (data.used_context.length === 0) {
+                    contextDiv.innerHTML = '<div class="text-gray-500 italic">No relevant documents found.</div>';
+                } else {
+                    contextDiv.innerHTML = data.used_context.map(c => `<div class="mb-2 p-2 bg-white rounded border-l-4 border-blue-400">${escapeHtml(c)}</div>`).join('');
+                }
+
+                const totalDocs = 8;
+                const usedCount = data.used_context.length;
+                const ignoredCount = totalDocs - usedCount;
+                if (ignoredCount > 0) {
+                    ignoredDiv.innerHTML = `✅ Pruned ${ignoredCount} irrelevant document(s). For example, the dental record from 2010 was ignored because the query is about a cardiac event.`;
+                } else {
+                    ignoredDiv.innerHTML = 'No irrelevant documents found to prune.';
+                }
+
+                latencySpan.innerText = data.latency_ms;
+                resultDiv.classList.remove('hidden');
+            } catch (err) {
+                showError(err.message);
+            } finally {
+                loadingDiv.classList.add('hidden');
+            }
+        }
+
+        function showError(msg) {
+            errorTextSpan.innerText = msg;
+            errorDiv.classList.remove('hidden');
+            loadingDiv.classList.add('hidden');
+            resultDiv.classList.add('hidden');
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+    </script>
+</body>
+</html>

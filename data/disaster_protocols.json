@@ -1,0 +1,20 @@
+[
+  {
+    "id": "D001",
+    "type": "protocol",
+    "category": "cardiac",
+    "content": "For suspected acute coronary syndrome: administer aspirin 324mg chewable, obtain ECG within 10 minutes, give oxygen if SpO2 <90%, activate cath lab if STEMI."
+  },
+  {
+    "id": "D002",
+    "type": "protocol",
+    "category": "trauma",
+    "content": "For major trauma: ABCDE approach, cervical spine immobilization, large bore IV access, tranexamic acid if bleeding."
+  },
+  {
+    "id": "D003",
+    "type": "protocol",
+    "category": "dental",
+    "content": "For dental emergencies: control bleeding with gauze, refer to dentist within 24 hours."
+  }
+]

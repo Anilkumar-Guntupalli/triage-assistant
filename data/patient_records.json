@@ -1,0 +1,37 @@
+[
+  {
+    "id": "P001",
+    "type": "history",
+    "specialty": "cardiology",
+    "date": "2023-05-10",
+    "content": "Patient has history of hypertension and stable angina. ECG showed normal sinus rhythm. Prescribed Lisinopril 10mg daily."
+  },
+  {
+    "id": "P002",
+    "type": "history",
+    "specialty": "dental",
+    "date": "2010-03-22",
+    "content": "Routine dental cleaning, no caries. Recommended fluoride treatment."
+  },
+  {
+    "id": "P003",
+    "type": "history",
+    "specialty": "cardiology",
+    "date": "2024-01-15",
+    "content": "Patient underwent stress test, positive for ischemia. Referred for cardiac catheterization."
+  },
+  {
+    "id": "P004",
+    "type": "history",
+    "specialty": "orthopedics",
+    "date": "2023-11-02",
+    "content": "Left ankle sprain, advised rest and ice. No fracture."
+  },
+  {
+    "id": "P005",
+    "type": "history",
+    "specialty": "cardiology",
+    "date": "2025-02-20",
+    "content": "Emergency visit for chest pain, troponin elevated, diagnosed with NSTEMI. Stent placed in LAD."
+  }
+]
